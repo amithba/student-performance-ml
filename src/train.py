@@ -1,19 +1,22 @@
+"""Train the student performance prediction model."""
+
 import os
+
 import joblib
-import pandas as pd
 import mlflow
 import mlflow.sklearn
+import pandas as pd
 
-from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score
+from sklearn.model_selection import train_test_split
 
 
 # Load dataset
 data = pd.read_csv("data/student_data.csv")
 
 # Input features
-X = data[
+x = data[
     [
         "study_hours",
         "attendance",
@@ -26,8 +29,8 @@ X = data[
 y = data["result"]
 
 # Split data
-X_train, X_test, y_train, y_test = train_test_split(
-    X,
+x_train, x_test, y_train, y_test = train_test_split(
+    x,
     y,
     test_size=0.2,
     random_state=42
@@ -45,12 +48,12 @@ mlflow.set_experiment("Student Performance Prediction")
 with mlflow.start_run():
 
     # Train model
-    model.fit(X_train, y_train)
+    model.fit(x_train, y_train)
 
     # Predictions
-    predictions = model.predict(X_test)
+    predictions = model.predict(x_test)
 
-    # Metrics
+    # Calculate metrics
     accuracy = accuracy_score(y_test, predictions)
 
     precision = precision_score(
@@ -65,6 +68,7 @@ with mlflow.start_run():
         zero_division=0
     )
 
+    # Display metrics
     print("Accuracy:", accuracy)
     print("Precision:", precision)
     print("Recall:", recall)
@@ -79,7 +83,7 @@ with mlflow.start_run():
     mlflow.log_metric("precision", precision)
     mlflow.log_metric("recall", recall)
 
-    # Create models folder
+    # Create models directory
     os.makedirs("models", exist_ok=True)
 
     # Save model

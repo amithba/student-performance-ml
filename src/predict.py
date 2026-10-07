@@ -1,10 +1,11 @@
+"""Make predictions using the trained student performance model."""
+
 import joblib
 import pandas as pd
 
 
 # Load trained model
 model = joblib.load("models/model.pkl")
-
 
 # Example student data
 student = pd.DataFrame(
@@ -17,10 +18,8 @@ student = pd.DataFrame(
     ]
 )
 
-
 # Make prediction
 prediction = model.predict(student)[0]
-
 
 # Display result
 if prediction == 1:
