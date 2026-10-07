@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Run Pylint
+        run: pylint src/train.py src/predict.py
+
       - name: Run unit tests
         run: pytest -v
 
@@ -54,7 +57,7 @@ jobs:
         shell: bash
         run: test -f models/model.pkl
 
-      - name: Run model tests
+      - name: Test model
         run: pytest -v
 
 
